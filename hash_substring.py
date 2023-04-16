@@ -1,47 +1,49 @@
+import numpy as np
+    # Aleksandrs Kurjans 6.gr 221RDB420
+
 def read_input():
+    # this function needs to acquire input both from keyboard and file
+    # as before, use 1 (input from keyboard) and 2 (input from file) to choose which input type will follow
+    source = input()
+    if source[0] == '1':
+        return (input().rstrip(), input().rstrip())
+    elif source[0] == '2':
+        with open("tests/06", 'r') as f:
+            return (f.readline().rstrip(), f.readline().rstrip())
+    else:
+        return None
     
-    text = input()
-    if 2 in text:
-        with open("./tests/06") as f:
-            patt = f.readline()
-            text = f.readline()
-    elif 1 in text:
-        patt = input()
-        text = input()
-    return (patt.rstrip(), text.rstrip())
 
 def print_occurrences(output):
     # this function should control output, it doesn't need any return
     print(' '.join(map(str, output)))
 
+
 def get_occurrences(pattern, text):
-    # this function should find the occurrences using Rabin Karp algorithm
-    pnlg = len(pattern)
-    txlg = len(text)
-    hasht=0
-    hashp=0
-    chs = 56
-    q = 11
-    bup=1
-    rez = []
-    for i in range(pnlg-1):
-        bup = (bup*chs)%q
-    for i in range(pnlg):
-        hashp=(hashp*chs+ord(pattern[i]))%q
-        hasht=(hasht*chs+ord(text[i]))%q
-    for i in range(txlg-pnlg+1):
-        if hashp == hasht:
-            for j in range(pnlg):
-                if text[i+j] != pattern[j]:
-                    break
-            else:
-                rez.append(i)
-        if i < txlg-pnlg:
-            hasht = (chs *(hasht - ord (text[i])*bup)+ord (text[pnlg+i])) % q
-            if hasht < 0:
-                hasht = hasht+q
-    # and return an iterable variable
-    return rez
+    # this function should find the occurrences using Rabin-Karp algorithm 
+    d = 10
+    q = 997
+    pattern_l = len(pattern)
+    text_l = len(text)
+    m = 0
+    n = 0
+    h = 1
+    occurrences = []
+    for i in range(pattern_l-1):
+        h = (h * d) % q
+    for i in range(pattern_l):
+       m = (d*m + ord(pattern[i])) % q
+       n = (d*n + ord(text[i])) % q
+    for i in range(text_l - pattern_l + 1):
+        if m == n and text[i:i+pattern_l] == pattern:
+          occurrences.append(i)
+        if i < text_l - pattern_l:
+          n = (d*(n - ord(text[i])*h) + ord(text[i+pattern_l])) % q
+
+        if n < 0:
+            n += q
+    return occurrences
+
 
 # this part launches the functions
 if __name__ == '__main__':
