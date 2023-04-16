@@ -1,28 +1,21 @@
 import numpy as np
-    # Aleksandrs Kurjans 6.gr 221RDB420
 
 def read_input():
-    # this function needs to acquire input both from keyboard and file
-    # as before, use 1 (input from keyboard) and 2 (input from file) to choose which input type will follow
-    source = input()
-    if source[0] == '1':
+    source= input()
+    if source[0] == 'I':
         return (input().rstrip(), input().rstrip())
-    elif source[0] == '2':
+    elif source[0] == 'F':
         with open("tests/06", 'r') as f:
             return (f.readline().rstrip(), f.readline().rstrip())
     else:
-        return None
-    
+        return
 
 def print_occurrences(output):
-    # this function should control output, it doesn't need any return
     print(' '.join(map(str, output)))
 
-
 def get_occurrences(pattern, text):
-    # this function should find the occurrences using Rabin-Karp algorithm 
     d = 10
-    q = 997
+    q = 968
     pattern_l = len(pattern)
     text_l = len(text)
     m = 0
@@ -44,9 +37,6 @@ def get_occurrences(pattern, text):
             n += q
     return occurrences
 
-
-# this part launches the functions
 if __name__ == '__main__':
     print_occurrences(get_occurrences(*read_input()))
-
 
